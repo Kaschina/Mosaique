@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: MosaiqueProject
+Bundle-SymbolicName: MosaiqueProject
+Bundle-Version: 1.0.0.qualifier
+Bundle-ClassPath: MosaiqueProject.jar,
+ melanie/Repositories/Javaproject/libs/args4j-2.0.21.jar,
+ melanie/Repositories/Javaproject/libs/args4j-2.0.21-sources.jar
+Export-Package: mos.avg.handler,
+ mos.img.calc,
+ mos.init,
+ mos.ui
