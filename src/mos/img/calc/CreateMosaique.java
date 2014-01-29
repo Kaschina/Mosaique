@@ -270,4 +270,8 @@ public class CreateMosaique {
         readWrite.writeList(info, mosaiqueList);
     }
 
+	public int getNumberOfThreads() {
+		return numberOfThreads;
+	}
+
 }

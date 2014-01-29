@@ -10,15 +10,26 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.pde.ManifestBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.pde.SchemaBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>org.eclipse.pde.PluginNature</nature>
 	</natures>
 	<linkedResources>
 		<link>
 			<name>Bibliotheken</name>
 			<type>2</type>
-			<location>C:/Users/Melanie/Bibliotheken</location>
+			<location>/home/melanie/C::/Users/Melanie/Bibliotheken</location>
 		</link>
 	</linkedResources>
 </projectDescription>

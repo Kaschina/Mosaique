@@ -28,6 +28,10 @@ public class MyBufferedImage {
     public int getType() {
         return original.getType();
     }
+    
+    public BufferedImage getOriginal() {
+    	return original;
+    }
 
     public BufferedImage getResizedImage(int tileSize, int type) {
         BufferedImage dimg = new BufferedImage(tileSize, tileSize, type);

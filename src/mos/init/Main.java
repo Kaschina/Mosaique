@@ -8,7 +8,6 @@ package mos.init;
  */
 abstract class Main {
 
-    private static long time;
 
     /**
      * the main method.

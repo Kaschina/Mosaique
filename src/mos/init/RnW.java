@@ -97,7 +97,7 @@ public class RnW {
         }
     }
     
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "resource" })
     public ArrayList<ImageValue> readList(File source) {
         ArrayList<ImageValue> list = new ArrayList<ImageValue>();
         ObjectInputStream in = null;
@@ -118,7 +118,8 @@ public class RnW {
 
 	public void writeFile(String string, String dateiStringInfo) {
 	  try {
-	    FileWriter fw = new FileWriter(new File(string));
+	    @SuppressWarnings("resource")
+		FileWriter fw = new FileWriter(new File(string));
 	    fw.write(dateiStringInfo);
 	    System.out.println("Datei erfolgreich gespeichert unter: " + string);
     } catch (IOException e) {
