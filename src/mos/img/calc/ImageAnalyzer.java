@@ -49,10 +49,7 @@ public class ImageAnalyzer {
 	 * create tiles of the bufferedImage. The tiles of the image are saved in an
 	 * arrayList by splitting the image in its accordingly subImages.
 	 * 
-	 * @param rows
-	 *            the number of rows the image has to be split into.
-	 * @param cols
-	 *            the number of columns the image has to be split into.
+	 * @param tileSize the size of a tile
 	 * @return an arrayList with every tile as BufferedImage.
 	 */
 	public ArrayList<BufferedImage> createTiles(int tileSize) {

@@ -39,9 +39,9 @@ public class TileCalculator {
     public int getOptSize(int tileSize) {
         int result = 0;
     
-        // suche nach Werten > dem gewünschten Wert.
+        // suche nach Werten > dem gewnschten Wert.
         int increasedSize = getIncreased(tileSize);
-        // suche nach Werten < dem gewünschten Wert.
+        // suche nach Werten < dem gewnschten Wert.
         int decreasedSize = getDecreased(tileSize);
 
         // vergleiche die Ergebnisse.
@@ -54,7 +54,7 @@ public class TileCalculator {
         }
         if (decreasedSize == 0) {
             result = increasedSize;
-            // wenn es zwei gültige Ergebnisse gibt, wird das mit dem kleinsten Abstand zum gewünschten Wert übergeben.
+            // wenn es zwei gï¿½ltige Ergebnisse gibt, wird das mit dem kleinsten Abstand zum gewï¿½nschten Wert ï¿½bergeben.
         } else if (increasedSize > 0 && decreasedSize > 0) {
         	// berechne die Differenzen
             int upDif = Math.abs(tileSize - increasedSize);

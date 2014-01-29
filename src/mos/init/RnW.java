@@ -49,13 +49,13 @@ public class RnW {
 
     /**
      * public method to get all images of a direction using the private method.
-     * 
+     * @param file
      * @return images the array of imageFiles.
      */
     public File[] getImages(File file) {
     	File[]images = listImages(file);
         if (directoryIsEmpty(images)) {
-            System.err.println("Das Verzeichnis enthält keine Bilder!");
+            System.err.println("Das Verzeichnis enthlt keine Bilder!");
         }
         return listImages(file);
     }

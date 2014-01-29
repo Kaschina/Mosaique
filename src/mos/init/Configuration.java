@@ -1,6 +1,7 @@
 package mos.init;
 
 import java.io.File;
+import org.kohsuke.args4j.CmdLineException;
 
 
 import org.kohsuke.args4j.CmdLineParser;
@@ -13,7 +14,7 @@ import org.kohsuke.args4j.Option;
  * @author Thomas Karcher
  * 
  */
-public class Configuration {
+public final class Configuration {
 
     @Option(name = "-s", aliases = { "--source" }, required = true,
             usage = "Filename for the original image that should be mosaiquized.")
@@ -88,7 +89,6 @@ public class Configuration {
                 throw new CmdLineException(parser,
                         "--dest is not a writable file.");
             }
-
             errorFree = true;
         } catch (CmdLineException e) {
             System.err.println("java -jar Mosaique.jar [options...]");

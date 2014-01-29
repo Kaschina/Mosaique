@@ -49,7 +49,7 @@ public class AverageCreator {
 
         /**
          * get the average of each color by dividing with size of pixelArray
-         * and don´t forget the decimal place...
+         * and dont forget the decimal place...
          */
         averageRgb = new short[3];
         for (int i = 0; i < 3; i++) {
@@ -58,7 +58,7 @@ public class AverageCreator {
 
         }
         catch(Exception e) {
-            System.err.println("average rgb lässt sich nicht bilden von " );
+            System.err.println("average rgb lï¿½sst sich nicht bilden von " );
             averageRgb = null;
         }
         return averageRgb;
