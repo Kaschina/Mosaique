@@ -15,7 +15,7 @@ abstract class Main {
      * @param args 4 arguments are needed, 5 possible.
      */
     public static void main(String[] args) {
-        Configuration config = new Configuration(args);
+        TermConfiguration config = new TermConfiguration(args);
         /**
          * If errors in arguments, exit program.
          */
