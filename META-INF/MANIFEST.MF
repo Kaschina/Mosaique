@@ -5,7 +5,8 @@ Bundle-SymbolicName: MosaiqueProject
 Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: MosaiqueProject.jar,
  melanie/Repositories/Javaproject/libs/args4j-2.0.21.jar,
- melanie/Repositories/Javaproject/libs/args4j-2.0.21-sources.jar
+ melanie/Repositories/Javaproject/libs/args4j-2.0.21-sources.jar,
+ swing2swt.jar
 Export-Package: mos.avg.handler,
  mos.img.calc,
  mos.init,

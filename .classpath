@@ -6,5 +6,7 @@
 	<classpathentry kind="lib" path="/home/melanie/Repositories/Javaproject/libs/args4j-2.0.21.jar"/>
 	<classpathentry kind="lib" path="/home/melanie/Repositories/Javaproject/libs/args4j-2.0.21-sources.jar"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="lib" path="/usr/lib64/eclipse/swt.jar"/>
+	<classpathentry kind="lib" path="swing2swt.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
