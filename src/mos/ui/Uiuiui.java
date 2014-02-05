@@ -110,12 +110,11 @@ public class Uiuiui {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		
+
 		if (!new File(PDIR).exists()) {
 			try {
 				new File(PDIR).createNewFile();
 			} catch (IOException e1) {
-				// TODO Automatisch generierter Erfassungsblock
 				e1.printStackTrace();
 			}
 		}
@@ -175,12 +174,11 @@ public class Uiuiui {
 		try {
 			bi = ImageIO.read(source);
 		} catch (IOException e1) {
-			// TODO Automatisch generierter Erfassungsblock
 			e1.printStackTrace();
 		}
 		sourceImage.setIcon(new ImageIcon(bi));
 		panel.add(sourceImage);
-		
+
 		slider = new JSlider();
 		slider.setBounds(20, 500, 200, 16);
 		slider.setMinimum(MIN);
@@ -214,13 +212,13 @@ public class Uiuiui {
 		});
 		btnNewButton.setBounds(230, 490, 190, 25);
 		panel.add(btnNewButton);
-		
+
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
-		
+
 		JMenu mnDatei = new JMenu("Datei");
 		menuBar.add(mnDatei);
-		
+
 		JMenuItem item = new JMenuItem("neue Sourcedatei");
 		item.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -230,7 +228,7 @@ public class Uiuiui {
 		});
 		JMenuItem item2 = new JMenuItem("neues Mosaikverzeichnis");
 		item2.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				getMosaiqueDir();
@@ -238,18 +236,18 @@ public class Uiuiui {
 		});
 		JMenuItem item3 = new JMenuItem("neues Zielverzeichnis");
 		item3.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				getDestinationDir();
 			}
 
-			
+
 		});
-		
+
 		JMenuItem item6 = new JMenuItem("Infodatei");
 		item6.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				getInfoFile();
@@ -259,13 +257,13 @@ public class Uiuiui {
 		mnDatei.add(item2);
 		mnDatei.add(item3);
 		mnDatei.add(item6);
-		
+
 		JMenu mnKonfiguration = new JMenu("Konfiguration");
 		menuBar.add(mnKonfiguration);
-		
+
 		JMenuItem item4 = new JMenuItem("Wartezeit festlegen");
 		item4.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println(getIntProperty(WAITTIME));
@@ -274,14 +272,14 @@ public class Uiuiui {
 		});
 		JMenuItem item5 = new JMenuItem("Anzahl Threads festlegen");
 		item5.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println(getIntProperty(NOT));
 				showDialog(frame, NOT);
 			}
 		});
-		
+
 		mnKonfiguration.add(item4);
 		mnKonfiguration.add(item5);
 	}
@@ -299,7 +297,7 @@ public class Uiuiui {
 	}
 
 	protected void setWaittime() {
-		
+
 	}
 
 	private void getInfoFile() {
@@ -331,17 +329,17 @@ public class Uiuiui {
 			dir.mkdir();
 		}
 		setProperty(DEST, destination);
-		
+
 	}
-	
+
 	private void getMosaiqueDir() {
 		File dir = getPath(true, false, "Mosaikverzeichnis auswählen");
-		if (dir == null) 
+		if (dir == null)
 			return;
 		mosaiquesource = dir.getAbsolutePath();
 		setProperty(MS, mosaiquesource);
 	}
-	
+
 	private void showSource() {
 		source = getPath(false, true, "Bild auswählen");
 
@@ -357,11 +355,11 @@ public class Uiuiui {
 
 		}
 	}
-	
+
 
 	private void setProperty(String key, String value) {
 
-		
+
 		File file = new File(PDIR);
 		try {
 			Writer writer = new FileWriter(file);
@@ -380,7 +378,7 @@ public class Uiuiui {
 			e1.printStackTrace();
 		}
 	}
-	
+
 	private String getProperty(String key) {
 		String value = "";
 
@@ -397,7 +395,7 @@ public class Uiuiui {
 		}
 		return value;
 	}
-	
+
 	private void readProperties() {
 
 			info = getProperty(INFO);
@@ -421,19 +419,16 @@ public class Uiuiui {
 
 	public  void showDialog(JFrame parent, String type) {
 		int value = getIntProperty(type);
-		System.out.println(value);
 		SpinnerNumberModel model = new SpinnerNumberModel(value, 0, 40000, 1);
 		JSpinner spinner = new JSpinner(model);
-		
 		String result = JOptionPane.showInputDialog(spinner);
-		setProperty(type, result);		
-		System.out.println(result);
+		setProperty(type, result);
 	}
 	private File getPath(boolean isDir, boolean needsFilter, String text) {
 		File result = null;
 		JFileChooser chooser = new JFileChooser(text);
 		chooser.setName(text);
-		
+
 		chooser.setAccessory(new MyAccessory(chooser));
 
 		if (needsFilter) {
@@ -460,7 +455,7 @@ public class Uiuiui {
 
 	}
 
-	 
+
 	private static void setLookAndFeel() {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -503,7 +498,7 @@ class MyFileFilter extends FileFilter {
 }
  class MyAccessory extends JComponent implements PropertyChangeListener {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 2626268910546018039L;
 
