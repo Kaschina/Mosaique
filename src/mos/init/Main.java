@@ -22,7 +22,8 @@ abstract class Main {
         if (!config.isErrorFree()) {
             System.exit(0);
         } else {
-            Initializer.init(config);
+        	Initializer init = new Initializer();
+        	init.init(config);
         }
     }
 }

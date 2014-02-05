@@ -40,4 +40,12 @@ public class MyBufferedImage {
                 original.getWidth(), original.getHeight(), null);
         return dimg;
     }
+
+	public int getHeight() {
+		return original.getHeight();
+	}
+	
+	public int getWidth() {
+		return original.getWidth();
+	}
 }

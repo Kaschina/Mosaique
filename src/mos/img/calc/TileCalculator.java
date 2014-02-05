@@ -43,16 +43,15 @@ public class TileCalculator {
         int increasedSize = getIncreased(tileSize);
         // suche nach Werten < dem gewnschten Wert.
         int decreasedSize = getDecreased(tileSize);
-
         // vergleiche die Ergebnisse.
         if (increasedSize == 0) {
             if (decreasedSize == 0) {
-                return 0;
+                result = 0;
             } else {
-                return decreasedSize;
+                result = decreasedSize;
             }
         }
-        if (decreasedSize == 0) {
+        else if (decreasedSize == 0) {
             result = increasedSize;
             // wenn es zwei g�ltige Ergebnisse gibt, wird das mit dem kleinsten Abstand zum gew�nschten Wert �bergeben.
         } else if (increasedSize > 0 && decreasedSize > 0) {

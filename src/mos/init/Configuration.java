@@ -9,15 +9,15 @@ abstract class Configuration {
 	private File info;
 	private File mosaiquesource;
 	private Integer tilesize;
-	private Long waittime;
+	private int waittime;
 	private File dest;
 	private int numThreads;
 
 	public Configuration() {
 	}
-	
+
 	public void check(File file, File file2, File file3,
-			int tilesize, long waittime, File file4, int numThreads) {
+			int tilesize, int waittime, File file4, int numThreads) {
 
 		this.source = file;
 		this.info = file2;
@@ -30,7 +30,7 @@ abstract class Configuration {
 	}
 
 	protected void check(String source, String info, String mosaiquesource,
-			int tilesize, long waittime, String destination, int numThreads) {
+			int tilesize, int waittime, String destination, int numThreads) {
 		check(new File(source), new File(info), new File(mosaiquesource), tilesize, waittime, new File(destination), numThreads);
 		
 	}
@@ -108,7 +108,7 @@ abstract class Configuration {
 	 * 
 	 * @return The milliseconds to wait
 	 */
-	public Long getWaittime() {
+	public int getWaittime() {
 		return waittime;
 	}
 

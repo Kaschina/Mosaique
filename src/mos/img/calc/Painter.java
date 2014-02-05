@@ -40,9 +40,7 @@ public class Painter {
 		return griddedImage;
 	}
 	public BufferedImage paintGrid() {
-		if (tileSize < 19) {
-			return griddedImage;
-		}
+		
 		BufferedImage grid = new BufferedImage(width, height, image.getType());
 		Graphics2D graphics = grid.createGraphics();
 		graphics.drawImage(image, 0, 0, height, width, 0,0, height, width, null);
