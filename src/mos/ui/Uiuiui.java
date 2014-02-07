@@ -29,12 +29,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.JSlider;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
 
+import mos.img.calc.DirectoryAnalyzer;
 import mos.img.calc.Painter;
 import mos.img.calc.TileCalculator;
 import mos.init.Initializer;
@@ -61,17 +64,17 @@ public class Uiuiui {
 
 	private JFrame frame;
 	private JTextField text;
-	private final String[] extensions = { "jpg", "png" };
 	private File source;
 	private JLabel sourceImage;
-	private final int MIN = 0;
-	private final int MAX = 400;
 	private BufferedImage bi;
 	private JSlider slider;
-	private final Initializer init;
 	private String info;
 	private String destination;
 	private String mosaiquesource;
+	private boolean random;
+	private final String[] extensions = { "jpg", "png" };
+	private final int MIN = 0;
+	private final int MAX = 400;
 	private final String MS = "mosaiquesource";
 	private final String INFO = "info";
 	private final String DEST = "destination";
@@ -81,6 +84,8 @@ public class Uiuiui {
 	private final String WAITTIME = "waittime";
 	private final String NOT = "numberOfThreads";
 	protected boolean fromInfoFile;
+	private Initializer initializer;
+
 
 	/**
 	 * Launch the application.
@@ -88,6 +93,7 @@ public class Uiuiui {
 	public static void main(String[] args) {
 		setLookAndFeel();
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					Uiuiui window = new Uiuiui();
@@ -103,16 +109,13 @@ public class Uiuiui {
 	 * Create the application.
 	 */
 	public Uiuiui() {
-		init = new Initializer();
 		properties = new Properties(System.getProperties());
 		try {
 			properties.load(new FileReader(new File(PDIR)));
 			properties.list(System.out);
 		} catch (FileNotFoundException e) {
-			// TODO Automatisch generierter Erfassungsblock
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Automatisch generierter Erfassungsblock
 			e.printStackTrace();
 		}
 		initialize();
@@ -139,7 +142,7 @@ public class Uiuiui {
 		frame.getContentPane().setLayout(null);
 
 		frame.getContentPane().setLayout(new BorderLayout());
-		
+
 		JPanel panel = new JPanel();
 		panel.setLocation(24, 12);
 		frame.getContentPane().add(panel);
@@ -181,9 +184,11 @@ public class Uiuiui {
 			e1.printStackTrace();
 		}
 		sourceImage.setIcon(new ImageIcon(bi));
-		sourceImage.setHorizontalAlignment(JLabel.CENTER);
-		sourceImage.setVerticalAlignment(JLabel.CENTER);
-		JScrollPane scroller = new JScrollPane(sourceImage, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		sourceImage.setHorizontalAlignment(SwingConstants.CENTER);
+		sourceImage.setVerticalAlignment(SwingConstants.CENTER);
+		JScrollPane scroller = new JScrollPane(sourceImage,
+				ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		panel.add(BorderLayout.CENTER, scroller);
 
 		JPanel southpanel = new JPanel();
@@ -204,9 +209,12 @@ public class Uiuiui {
 
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				System.out.println(slider.getValue());
-				Initializer init = new Initializer();
-				int tileSize = init.getOptTileSize(bi, slider.getValue());
+				int value = slider.getValue();
+				if (value == 0) {
+					value = 1;
+				}
+				TileCalculator tc = new TileCalculator(bi.getHeight(), bi.getWidth());
+				int tileSize = tc.getOptSize(value);
 				paintGridImage(tileSize);
 			}
 		});
@@ -214,22 +222,25 @@ public class Uiuiui {
 
 		JButton btnNewButton = new JButton("Konvertierung starten");
 		btnNewButton.addMouseListener(new MouseAdapter() {
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				readProperties();
 				UiConfiguration config = null;
 				if (fromInfoFile) {
-					config = new UiConfiguration(source.getAbsolutePath(),
+					config = new UiConfiguration( source.getAbsolutePath(),
 							getProperty(DEST), "", getProperty(INFO), slider
 									.getValue(), getIntProperty(WAITTIME),
-							getIntProperty(NOT));
+							getIntProperty(NOT), random);
 				} else {
 					config = new UiConfiguration(source.getAbsolutePath(),
 							getProperty(DEST), getProperty(MS), "", slider
 									.getValue(), getIntProperty(WAITTIME),
-							getIntProperty(NOT));
+							getIntProperty(NOT), random);
 				}
-				init.init(config, sourceImage);
+				initializer  = new Initializer(Uiuiui.this, config, (ImageIcon)sourceImage.getIcon());
+				
+				initializer.start();
 
 			}
 		});
@@ -240,11 +251,22 @@ public class Uiuiui {
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
 
+		
+		JButton abbrechen = new JButton("Abbrechen");
+		abbrechen.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				interrupt();
+			}
+		});
+		panel.add(BorderLayout.EAST, abbrechen);
 		JMenu mnDatei = new JMenu("Datei");
 		menuBar.add(mnDatei);
 
 		JMenuItem item = new JMenuItem("neue Sourcedatei");
 		item.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("neue Sourcedatei");
 				showSource();
@@ -316,8 +338,10 @@ public class Uiuiui {
 
 		final JCheckBoxMenuItem chckbxmntmNewCheckItem = new JCheckBoxMenuItem(
 				"Mit Infodatei erzeugen");
+		chckbxmntmNewCheckItem.setSelected(true);
 		chckbxmntmNewCheckItem.addChangeListener(new ChangeListener() {
 
+			@Override
 			public void stateChanged(ChangeEvent e) {
 				if (chckbxmntmNewCheckItem.isSelected()) {
 					System.out.println("mit Info");
@@ -327,17 +351,22 @@ public class Uiuiui {
 		});
 		mnKonfiguration.add(chckbxmntmNewCheckItem);
 
-		final JCheckBoxMenuItem checkBoxMenuItem = new JCheckBoxMenuItem("Test");
+		final JCheckBoxMenuItem checkBoxMenuItem = new JCheckBoxMenuItem("Kacheln in zufälliger Reihenfolge erzeugen");
+		
 		checkBoxMenuItem.addChangeListener(new ChangeListener() {
 
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				if (checkBoxMenuItem.isSelected()) {
-					System.out.println("test wurde ausgewählt");
+					random = true;
 				}
 			}
 		});
 		mnKonfiguration.add(checkBoxMenuItem);
+	}
+
+	protected void interrupt() {
+		initializer.yield();
 	}
 
 	protected void showInfoDialog() {
@@ -352,14 +381,16 @@ public class Uiuiui {
 				getMosaiqueDir();
 			}
 			if (new File(info).exists()) {
-				int decision = JOptionPane.showConfirmDialog(frame, "Diese Datei existiert bereits.\nSoll sie überschrieben werden?");
+				int decision = JOptionPane
+						.showConfirmDialog(frame,
+								"Diese Datei existiert bereits.\nSoll sie überschrieben werden?");
 				if (decision != 0)
 					return;
 			}
 			if (!new File(info).getParentFile().isDirectory()) {
 				new File(info).mkdirs();
 			}
-			init.createInfoFile(info, mosaiquesource);
+			new DirectoryAnalyzer().createList(new File(mosaiquesource), new File(info));
 		}
 	}
 
@@ -426,6 +457,7 @@ public class Uiuiui {
 		try {
 			bi = ImageIO.read(source);
 			text.setText(source.getAbsolutePath());
+			slider.setValue(200);
 			paintGridImage(slider.getValue());
 		} catch (Exception e) {
 
@@ -503,7 +535,8 @@ public class Uiuiui {
 		File result = null;
 		JFileChooser chooser = new JFileChooser(text);
 		chooser.setName(text);
-
+		chooser.setCurrentDirectory(new File(
+				"/home/melanie/Dokumente/Beispielbilder"));
 		chooser.setAccessory(new MyAccessory(chooser));
 
 		if (needsFilter) {
@@ -528,6 +561,11 @@ public class Uiuiui {
 		BufferedImage buffim = painter.paintGrid();
 		sourceImage.setIcon(new ImageIcon(buffim));
 
+	}
+	
+	public void updateLabel(ImageIcon image) {
+		sourceImage.setIcon(image);
+		sourceImage.paintImmediately(0, 0, image.getIconHeight() * 2, image.getIconWidth() * 2);
 	}
 
 	private static void setLookAndFeel() {
@@ -590,6 +628,7 @@ class MyAccessory extends JComponent implements PropertyChangeListener {
 	}
 
 	// This listener listens for changes to the selected file
+	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (JFileChooser.SELECTED_FILE_CHANGED_PROPERTY.equals(evt
 				.getPropertyName())) {
@@ -611,6 +650,7 @@ class MyAccessory extends JComponent implements PropertyChangeListener {
 		}
 	}
 
+	@Override
 	public void paint(Graphics g) {
 		try {
 			g.drawImage(image, 10, 0, 150, 150, this.getBackground(), null);

@@ -60,7 +60,7 @@ public final class TermConfiguration extends Configuration {
                 throw new CmdLineException(parser, "No options given. Don't know what to do...");
             }
             check( getSource(),  getInfo(),  getMosaiquesource(),
-			 getTilesize(), getWaittime(),  getDest(),  getNumThreads());
+			 getTilesize(), getWaittime(),  getDest(),  getNumThreads(), isRandomized());
         } catch (CmdLineException e) {
             System.err.println("java -jar Mosaique.jar [options...]");
             parser.printUsage(System.err);

@@ -11,23 +11,31 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
-import javax.swing.JLabel;
+import javax.swing.ImageIcon;
 
 import mos.img.calc.CreateMosaique;
 import mos.img.calc.DirectoryAnalyzer;
 import mos.img.calc.ImageAnalyzer;
 import mos.img.calc.TileCalculator;
+import mos.ui.Uiuiui;
 
 /**
  * 
  * @author melanie
  */
-public class Initializer {
+public class Initializer extends Thread {
 
-	JLabel label;
-	public void init(Configuration config, JLabel label) {
-		this.label = label;
-		init(config);
+	Uiuiui ui;
+	Configuration config;
+	ImageIcon icon;
+	public Initializer(Uiuiui ui, Configuration config, ImageIcon icon) {
+		this.ui = ui;
+		this.config = config;
+		this.icon = icon;
+	}
+	@Override
+	public void run() {
+		init();
 	}
 	/**
 	 * get all informations from config and start editing the desired picture.
@@ -35,7 +43,7 @@ public class Initializer {
 	 * @param config
 	 *            your config
 	 */
-	public void init(Configuration config) {
+	public void init() {
 
 		// just to know how long it takes
 		long time = -System.currentTimeMillis();
@@ -68,7 +76,7 @@ public class Initializer {
 				System.out.println("erzeuge creator");
 				
 				creator = new CreateMosaique(tiles, sourceImage,
-						numberOfThreads, waittime, label);
+						numberOfThreads, waittime, config.isRandomized(), ui, icon);
 				BufferedImage result = null;
 				File mosaiqueSource = config.getMosaiquesource();
 				/**
@@ -108,6 +116,8 @@ public class Initializer {
 				}
 				try {
 					ImageIO.write(result, "png", dest);
+					
+					System.out.println("print " + dest);
 					System.out
 							.println(time + System.currentTimeMillis() + "ms");
 				} catch (IOException e) {
@@ -120,6 +130,9 @@ public class Initializer {
 	}
 
 	public int getOptTileSize(BufferedImage img, int tileSize) {
+		if (tileSize == 0) {
+			tileSize = 1;
+		}
 		TileCalculator calculator = new TileCalculator(img.getHeight(),
 				img.getWidth());
 		return calculator.getOptSize(tileSize);

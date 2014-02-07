@@ -12,12 +12,13 @@ abstract class Configuration {
 	private int waittime;
 	private File dest;
 	private int numThreads;
+	private boolean random;
 
 	public Configuration() {
 	}
 
 	public void check(File file, File file2, File file3,
-			int tilesize, int waittime, File file4, int numThreads) {
+			int tilesize, int waittime, File file4, int numThreads, boolean random) {
 
 		this.source = file;
 		this.info = file2;
@@ -26,12 +27,13 @@ abstract class Configuration {
 		this.waittime = waittime;
 		this.dest = file4;
 		this.numThreads = numThreads;
+		this.random = random;
 		errorFree = getErrors();
 	}
 
 	protected void check(String source, String info, String mosaiquesource,
-			int tilesize, int waittime, String destination, int numThreads) {
-		check(new File(source), new File(info), new File(mosaiquesource), tilesize, waittime, new File(destination), numThreads);
+			int tilesize, int waittime, String destination, int numThreads, boolean random) {
+		check(new File(source), new File(info), new File(mosaiquesource), tilesize, waittime, new File(destination), numThreads, random);
 		
 	}
 
@@ -74,6 +76,10 @@ abstract class Configuration {
 	 */
 	public File getSource() {
 		return source;
+	}
+	
+	public boolean isRandomized() {
+		return random;
 	}
 
 	/**
