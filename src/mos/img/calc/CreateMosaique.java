@@ -6,7 +6,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -37,7 +36,7 @@ public class CreateMosaique {
 	/**
 	 * the width of tiles.
 	 */
-	private final int tilesWidth;
+	//private final int tilesWidth;
 	/**
 	 * the height of the sourceImage.
 	 */
@@ -52,10 +51,9 @@ public class CreateMosaique {
 	private final int numberOfThreads;
 	
 	private final RnW readWrite;
-	private HashMap<Integer, String> diffList;
 	private final int type;
 	private JLabel label;
-	private final int waittime;
+//	private final int waittime;
 	private BufferedImage griddedImage;
 	HashMap<Integer, MyBufferedImage> fittingImages;
 
@@ -90,14 +88,14 @@ public class CreateMosaique {
 			int numberOfThreads, int waittime) {
 		this.tiles = tiles;
 		this.tilesHeight = tiles.get(0).getHeight();
-		this.tilesWidth = tiles.get(0).getWidth();
+		//this.tilesWidth = tiles.get(0).getWidth();
 		this.sourceHeight = source.getHeight();
 		this.sourceWidth = source.getWidth();
 		this.type = source.getType();
 		this.imgFactory = Factory.getInstance();
 		this.numberOfThreads = numberOfThreads;
 		this.readWrite = new RnW();
-		this.waittime = waittime;
+		//this.waittime = waittime;
 		this.fittingImages = new HashMap<Integer, MyBufferedImage>();
 	}
 	
@@ -154,16 +152,9 @@ public class CreateMosaique {
 		int numberOfTiles = rgbOfTiles.size();
 
 
-		ExecutorService executor = Executors.newFixedThreadPool(10);
-		
-		/**
-		 * TODO
-		 * THREADING!!
-		 */
+		ExecutorService executor = Executors.newFixedThreadPool(numberOfThreads);
 		for (int i = 0; i < numberOfTiles; i++) {
 			short[] rgbTile = rgbOfTiles.get(i);
-			
-			diffList = new HashMap<Integer, String>();
 			
 			// myfittingImages is created
 			Runnable worker = new FittingImageCalculator(this, rgbTile, mosaiqueList, i, imgFactory);
@@ -173,13 +164,7 @@ public class CreateMosaique {
 		while (!executor.isTerminated()) {
 			
 		}
-		System.out.println("fittingImages berechnen beendet");
-		executor = Executors.newFixedThreadPool(10);
-
-		/*
-		 * TODO
-		 *  THREADING
-		 */
+		executor = Executors.newFixedThreadPool(numberOfThreads);
 		for (Map.Entry<Integer, MyBufferedImage> entry : fittingImages.entrySet()) {
 			int index = entry.getKey();
 			//get resized image of actual tile
@@ -192,23 +177,6 @@ public class CreateMosaique {
 		executor.shutdown();
 		while (!executor.isTerminated()) {
 		}
-		System.out.println("bild beendet");
-		
-		/*
-		for (int x = 0; x < sourceWidth; x += tilesWidth) {
-			for (int y = 0; y < sourceHeight; y += tilesHeight) {
-				
-				MyBufferedImage now = entry.;
-				
-				BufferedImage tile = now.getResizedImage(tilesHeight, type);
-				
-				griddedImage.createGraphics().drawImage(tile, x, y, null);
-				label.setIcon(new ImageIcon(griddedImage));
-				label.paintImmediately(0, 0, 400, 400);
-
-			}
-		}
-	*/
 		return griddedImage;
 	}
 	
@@ -223,10 +191,8 @@ public class CreateMosaique {
 		int numHeight = sourceHeight / tilesize;
 		int x = index / numHeight;
 		int y = index % numHeight;
-		System.out.println("index: " + index + "\nx: " + x + "\ny: "+ y + "\n\n\n");
 		x *= tilesize;
 		y *= tilesize;
-		System.out.println("index: " + index + "\nx: " + x + "\ny: "+ y + "\n\n\n");
 
 		return new Point (x , y);
 		
@@ -348,7 +314,6 @@ class FittingImageCalculator implements Runnable {
 		 * the path to the fitting image.
 		 */
 		String pathOfFittingImage = diffList.get(smallestElem);
-		System.out.println(pathOfFittingImage);
 		MyBufferedImage myFittingImage = imgFactory
 				.getMyBufferedImage(pathOfFittingImage);
 		cm.updateFittingImages(index, myFittingImage);

@@ -351,7 +351,14 @@ public class Uiuiui {
 			while (mosaiquesource.equals("")) {
 				getMosaiqueDir();
 			}
-			System.out.println("createFileInfo");
+			if (new File(info).exists()) {
+				int decision = JOptionPane.showConfirmDialog(frame, "Diese Datei existiert bereits.\nSoll sie überschrieben werden?");
+				if (decision != 0)
+					return;
+			}
+			if (!new File(info).getParentFile().isDirectory()) {
+				new File(info).mkdirs();
+			}
 			init.createInfoFile(info, mosaiquesource);
 		}
 	}
