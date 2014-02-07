@@ -82,7 +82,9 @@ abstract class Configuration {
 	 * @return The storage file.
 	 */
 	public File getInfo() {
-		return info;
+		if (info.isFile())
+			return info;
+		return null;
 	}
 
 	/**
@@ -91,7 +93,9 @@ abstract class Configuration {
 	 * @return The original file
 	 */
 	public File getMosaiquesource() {
-		return mosaiquesource;
+		if (mosaiquesource.isDirectory())
+			return mosaiquesource;
+		return null;
 	}
 
 	/**

@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 
 import mos.img.calc.CreateMosaique;
+import mos.img.calc.DirectoryAnalyzer;
 import mos.img.calc.ImageAnalyzer;
 import mos.img.calc.TileCalculator;
 
@@ -80,14 +81,6 @@ public class Initializer {
 					 */
 					System.out.println("create from source");
 					result = creator.createImageFromSource(mosaiqueSource);
-					/**
-					 * if argument for info is given also write results to list.
-					 */
-					if (config.getInfo() != null) {
-						File info = config.getInfo();
-
-						creator.writeInfoList(info);
-					}
 				}/**
 				 * If only argument for info is given, get the list from file
 				 * info.
@@ -101,7 +94,6 @@ public class Initializer {
 				 * store result at destination.
 				 */
 				File dest = config.getDest();
-				System.out.println(dest.getAbsolutePath());
 				if (dest.isDirectory()) {
 					String newFile = dest.getAbsolutePath() + "/"
 							+ source.getName().substring(0, source.getName().indexOf(".")) + "mosaique.png";
@@ -116,11 +108,8 @@ public class Initializer {
 				}
 				try {
 					ImageIO.write(result, "png", dest);
-					System.out.println("Bild erfolgreich gespeichert unter "
-							+ dest.getAbsolutePath());
 					System.out
 							.println(time + System.currentTimeMillis() + "ms");
-				//	System.exit(0);
 				} catch (IOException e) {
 					System.out.println(e);
 				}
@@ -134,5 +123,11 @@ public class Initializer {
 		TileCalculator calculator = new TileCalculator(img.getHeight(),
 				img.getWidth());
 		return calculator.getOptSize(tileSize);
+	}
+	
+	public void createInfoFile(String info, String mosaiqueSource) {
+		DirectoryAnalyzer dirana = new DirectoryAnalyzer();
+		dirana.createList(new File(mosaiqueSource), new File(info));
+		
 	}
 }
